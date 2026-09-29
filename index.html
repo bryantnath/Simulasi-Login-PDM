@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIPMB — Sistem Informasi Penerimaan Mahasiswa Baru</title>
+  <meta name="description" content="Aplikasi pendaftaran mahasiswa baru: registrasi, data diri, dan pemilihan program studi." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ================= CINEMATIC BACKGROUND ================= -->
+  <div class="bg-scene" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- ================= INTRO / SPLASH ================= -->
+  <div id="splash" class="splash">
+    <div class="splash-inner">
+      <div class="splash-logo">
+        <span class="logo-mark">🎓</span>
+      </div>
+      <h1 class="splash-title">SIPMB</h1>
+      <p class="splash-sub">Sistem Informasi Penerimaan Mahasiswa Baru</p>
+      <div class="splash-bar"><span></span></div>
+    </div>
+  </div>
+
+  <!-- ================= AUTH SCREEN (MODUL 1) ================= -->
+  <section id="auth-screen" class="screen auth-screen">
+    <div class="auth-card glass reveal">
+      <div class="auth-brand">
+        <span class="logo-mark small">🎓</span>
+        <div>
+          <h2>SIPMB</h2>
+          <span>Portal Pendaftaran Mahasiswa Baru</span>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="login">Masuk</button>
+        <button class="tab" data-tab="register">Daftar Akun</button>
+        <span class="tab-indicator"></span>
+      </div>
+
+      <!-- LOGIN -->
+      <form id="login-form" class="auth-form active" autocomplete="off">
+        <div class="field">
+          <input type="text" id="login-username" required />
+          <label>Username</label>
+          <span class="line"></span>
+        </div>
+        <div class="field">
+          <input type="password" id="login-password" required />
+          <label>Password</label>
+          <span class="line"></span>
+        </div>
+        <p class="form-msg" id="login-msg"></p>
+        <button type="submit" class="btn btn-primary btn-block">
+          <span>Masuk</span>
+        </button>
+        <p class="hint">Belum punya akun? <a data-goto="register">Daftar sekarang</a></p>
+      </form>
+
+      <!-- REGISTER -->
+      <form id="register-form" class="auth-form" autocomplete="off">
+        <div class="field">
+          <input type="text" id="reg-fullname" required />
+          <label>Nama Lengkap</label>
+          <span class="line"></span>
+        </div>
+        <div class="field">
+          <input type="text" id="reg-username" required />
+          <label>Username</label>
+          <span class="line"></span>
+        </div>
+        <div class="field">
+          <input type="email" id="reg-email" required />
+          <label>Email</label>
+          <span class="line"></span>
+        </div>
+        <div class="field">
+          <input type="password" id="reg-password" required />
+          <label>Password</label>
+          <span class="line"></span>
+          <div class="pw-meter"><span id="pw-bar"></span></div>
+        </div>
+        <p class="form-msg" id="register-msg"></p>
+        <button type="submit" class="btn btn-primary btn-block">
+          <span>Buat Akun</span>
+        </button>
+        <p class="hint">Sudah punya akun? <a data-goto="login">Masuk di sini</a></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ================= APP SHELL ================= -->
+  <div id="app-shell" class="app-shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="side-brand">
+        <span class="logo-mark small">🎓</span>
+        <b>SIPMB</b>
+      </div>
+      <nav class="side-nav">
+        <button class="nav-item active" data-view="dashboard"><i>🏠</i><span>Dashboard</span></button>
+        <button class="nav-item" data-view="biodata"><i>📝</i><span>Data Diri</span></button>
+        <button class="nav-item" data-view="prodi"><i>🎯</i><span>Pilih Prodi</span></button>
+      </nav>
+      <div class="side-foot">
+        <div class="user-chip">
+          <span class="avatar" id="side-avatar">A</span>
+          <div>
+            <b id="side-name">User</b>
+            <small id="side-username">@user</small>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="logout-btn">Keluar</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1 id="view-title">Dashboard</h1>
+          <p id="view-sub" class="muted">Ringkasan status pendaftaran Anda</p>
+        </div>
+        <div class="topbar-actions">
+          <div class="step-pill" id="step-pill">Langkah 1 dari 3</div>
+        </div>
+      </header>
+
+      <!-- ===== VIEW: DASHBOARD ===== -->
+      <section class="view active" id="view-dashboard">
+        <div class="hero-card glass">
+          <div class="hero-text">
+            <span class="badge">Selamat datang 👋</span>
+            <h2 id="hero-name">Halo, Calon Mahasiswa!</h2>
+            <p class="muted">Lengkapi langkah pendaftaran di bawah ini. Data akan tersimpan otomatis di perangkat Anda.</p>
+          </div>
+          <div class="progress-ring">
+            <svg viewBox="0 0 120 120">
+              <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+              <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="52"></circle>
+            </svg>
+            <div class="ring-label"><b id="ring-pct">0%</b><small>selesai</small></div>
+          </div>
+        </div>
+
+        <div class="steps-grid">
+          <button class="step-card" data-view="biodata" id="card-biodata">
+            <div class="step-ico">📝</div>
+            <div class="step-body">
+              <span class="step-no">Langkah 1</span>
+              <h3>Lengkapi Data Diri</h3>
+              <p class="muted">Isi biodata sebagai calon mahasiswa.</p>
+            </div>
+            <span class="step-status" id="status-biodata">Belum</span>
+          </button>
+
+          <button class="step-card" data-view="prodi" id="card-prodi">
+            <div class="step-ico">🎯</div>
+            <div class="step-body">
+              <span class="step-no">Langkah 2</span>
+              <h3>Pilih Program Studi</h3>
+              <p class="muted">Tentukan prodi tujuan Anda.</p>
+            </div>
+            <span class="step-status" id="status-prodi">Belum</span>
+          </button>
+
+          <div class="step-card summary" id="card-summary">
+            <div class="step-ico">✅</div>
+            <div class="step-body">
+              <span class="step-no">Status</span>
+              <h3 id="summary-title">Pendaftaran Berjalan</h3>
+              <p class="muted" id="summary-text">Selesaikan semua langkah untuk finalisasi.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== VIEW: BIODATA (MODUL 2) ===== -->
+      <section class="view" id="view-biodata">
+        <form id="biodata-form" class="glass form-card">
+          <div class="form-grid">
+            <div class="field filled"><input type="text" id="bio-nama" required /><label>Nama Lengkap</label><span class="line"></span></div>
+            <div class="field"><input type="text" id="bio-nik" maxlength="16" /><label>NIK (opsional)</label><span class="line"></span></div>
+            <div class="field select">
+              <select id="bio-jk" required>
+                <option value="" hidden></option>
+                <option>Laki-laki</option>
+                <option>Perempuan</option>
+              </select>
+              <label>Jenis Kelamin</label><span class="line"></span>
+            </div>
+            <div class="field"><input type="text" id="bio-tempat" /><label>Tempat Lahir</label><span class="line"></span></div>
+            <div class="field"><input type="date" id="bio-tgl" /><label class="static">Tanggal Lahir</label><span class="line"></span></div>
+            <div class="field"><input type="text" id="bio-sekolah" /><label>Asal Sekolah</label><span class="line"></span></div>
+            <div class="field select">
+              <select id="bio-jurusan">
+                <option value="" hidden></option>
+                <option>IPA</option><option>IPS</option><option>Bahasa</option><option>SMK</option><option>Lainnya</option>
+              </select>
+              <label>Jurusan Sekolah</label><span class="line"></span>
+            </div>
+            <div class="field"><input type="email" id="bio-email" required /><label>Email</label><span class="line"></span></div>
+            <div class="field"><input type="tel" id="bio-hp" /><label>No. HP / WhatsApp</label><span class="line"></span></div>
+            <div class="field span-2"><input type="text" id="bio-alamat" /><label>Alamat Domisili</label><span class="line"></span></div>
+          </div>
+          <p class="form-msg" id="biodata-msg"></p>
+          <div class="form-actions">
+            <button type="button" class="btn btn-ghost" id="biodata-reset">Reset</button>
+            <button type="submit" class="btn btn-primary"><span>Simpan Data Diri</span></button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ===== VIEW: PRODI (MODUL 3) ===== -->
+      <section class="view" id="view-prodi">
+        <div class="prodi-head glass">
+          <div>
+            <h3>Pilih Program Studi Tujuan</h3>
+            <p class="muted">Klik kartu untuk memilih. Data prodi selaras dengan berkas <b>data_pmb.xlsx</b>.</p>
+          </div>
+          <div class="chosen-pill" id="chosen-pill" hidden>Pilihan: <b id="chosen-name"></b></div>
+        </div>
+        <div class="prodi-grid" id="prodi-grid"><!-- diisi JS --></div>
+        <div class="form-actions right">
+          <button class="btn btn-primary" id="prodi-confirm" disabled><span>Konfirmasi Pilihan</span></button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ================= TOAST ================= -->
+  <div id="toast" class="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

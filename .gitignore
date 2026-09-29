@@ -1,0 +1,13 @@
+# Kiro environment/config directories
+.kiro
+.kiro/
+.kiro *
+.kiro.*
+kiro~1
+
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Node (jika kelak dipakai)
+node_modules/
